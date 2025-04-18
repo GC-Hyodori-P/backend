@@ -1,5 +1,6 @@
 package com.hyodori.backend.domain;
 
+import com.hyodori.backend.dto.EmergencyInfoRequestDto;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.CreationTimestamp;
@@ -47,4 +48,12 @@ public class EmergencyInfo {
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
 
+    public void update(EmergencyInfoRequestDto dto) {
+        this.bloodType = dto.getBloodType();
+        this.medications = dto.getMedications();
+        this.medicalHistory = dto.getMedicalHistory();
+        this.address = dto.getAddress();
+        this.emergencyContactName = dto.getEmergencyContactName();
+        this.emergencyContactPhone = dto.getEmergencyContactPhone();
+    }
 }

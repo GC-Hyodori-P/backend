@@ -10,8 +10,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
-
 @Service
 @RequiredArgsConstructor
 public class EmergencyInfoService {
@@ -39,15 +37,42 @@ public class EmergencyInfoService {
                 .build();
 
         EmergencyInfo saved = emergencyInfoRepository.save(emergencyInfo);
+        return convertToDto(saved);
+    }
 
+    @Transactional
+    public EmergencyInfoResponseDto updateEmergencyInfoByPhoneNumber(String phoneNumber, EmergencyInfoRequestDto requestDto) {
+        User user = userRepository.findByPhoneNumber(phoneNumber)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
+
+        EmergencyInfo emergencyInfo = emergencyInfoRepository.findByUser(user)
+                .orElseThrow(() -> new IllegalStateException("등록된 긴급대응정보가 없습니다."));
+
+        emergencyInfo.update(requestDto);
+        return convertToDto(emergencyInfo);
+    }
+    @Transactional(readOnly = true)
+    public EmergencyInfoResponseDto getEmergencyInfo(String phoneNumber) {
+        User user = userRepository.findByPhoneNumber(phoneNumber)
+                .orElseThrow(() -> new IllegalArgumentException("해당 사용자를 찾을 수 없습니다."));
+
+        EmergencyInfo emergencyInfo = emergencyInfoRepository.findByUser(user)
+                .orElseThrow(() -> new IllegalStateException("등록된 긴급대응정보가 없습니다."));
+
+        return convertToDto(emergencyInfo);
+    }
+
+    private EmergencyInfoResponseDto convertToDto(EmergencyInfo entity) {
         return EmergencyInfoResponseDto.builder()
-                .emergencyInfoId(saved.getEmergencyInfoId())
-                .bloodType(saved.getBloodType())
-                .medications(saved.getMedications())
-                .medicalHistory(saved.getMedicalHistory())
-                .address(saved.getAddress())
-                .emergencyContactName(saved.getEmergencyContactName())
-                .emergencyContactPhone(saved.getEmergencyContactPhone())
+                .emergencyInfoId(entity.getEmergencyInfoId())
+                .bloodType(entity.getBloodType())
+                .medications(entity.getMedications())
+                .medicalHistory(entity.getMedicalHistory())
+                .address(entity.getAddress())
+                .emergencyContactName(entity.getEmergencyContactName())
+                .emergencyContactPhone(entity.getEmergencyContactPhone())
                 .build();
     }
+
+
 }

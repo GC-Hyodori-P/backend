@@ -1,3 +1,4 @@
+// repository/InterestRepository.java
 package com.hyodori.backend.repository;
 
 import com.hyodori.backend.domain.Interest;

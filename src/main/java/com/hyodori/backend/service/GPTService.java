@@ -28,15 +28,23 @@ public class GPTService {
         StringBuilder prompt = new StringBuilder();
         
         if (type == ConversationType.GDS_SURVEY) {
-            prompt.append("다음 GDS 설문 문항을 친근하고 자연스러운 대화체로 변환해주세요. ")
-                  .append("예/아니오로 대답할 수 있도록 해주세요.\n\n")
-                  .append("원본 문항: \"대체로 만족스럽게 생활하고 계십니까?\"");
-        } else {
-            prompt.append("다음 사용자 정보를 바탕으로 일상적인 대화를 생성해주세요. ")
-                  .append("예/아니오로 대답할 수 있는 질문이어야 합니다.\n\n")
+            prompt.append("당신은 따뜻하고 공감적인 AI 친구입니다. ")
+                  .append("다음 GDS 설문 문항을 친근하고 자연스러운 대화체로 변환해주세요. ")
+                  .append("예/아니오로 대답할 수 있도록 해주세요. ")
+                  .append("사용자의 나이와 상황을 고려하여 존댓말을 사용해주세요.\n\n")
+                  .append("원본 문항: \"대체로 만족스럽게 생활하고 계십니까?\"\n")
                   .append("사용자 정보:\n")
                   .append("- 이름: ").append(user.getName()).append("\n")
                   .append("- 나이: ").append(user.getAge()).append("\n");
+        } else {
+            prompt.append("당신은 따뜻하고 공감적인 AI 친구입니다. ")
+                  .append("다음 사용자 정보를 바탕으로 일상적인 대화를 생성해주세요. ")
+                  .append("예/아니오로 대답할 수 있는 질문이어야 합니다. ")
+                  .append("사용자의 나이와 상황을 고려하여 존댓말을 사용해주세요.\n\n")
+                  .append("사용자 정보:\n")
+                  .append("- 이름: ").append(user.getName()).append("\n")
+                  .append("- 나이: ").append(user.getAge()).append("\n")
+                  .append("- 대화 주제: 일상, 취미, 건강, 가족 관계 등\n");
         }
 
         return prompt.toString();
@@ -50,7 +58,7 @@ public class GPTService {
         Map<String, Object> requestBody = new HashMap<>();
         requestBody.put("model", "gpt-3.5-turbo");
         requestBody.put("messages", Arrays.asList(
-            Map.of("role", "system", "content", "You are a friendly and empathetic AI assistant."),
+            Map.of("role", "system", "content", "당신은 따뜻하고 공감적인 AI 친구입니다. 사용자의 상황과 감정을 이해하고 공감하며, 존댓말을 사용하여 대화합니다."),
             Map.of("role", "user", "content", prompt)
         ));
         requestBody.put("temperature", 0.7);

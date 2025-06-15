@@ -80,7 +80,7 @@ public class MoodReportService {
         dto.setMoodScore(moodReport.getMoodScore());
         dto.setCreatedAt(moodReport.getCreatedAt());
         dto.setUpdatedAt(moodReport.getUpdatedAt());
-        dto.setUserId(moodReport.getUser().getId());
+        dto.setUserId(moodReport.getUser().getUserId());
         return dto;
     }
 } 

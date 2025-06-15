@@ -7,7 +7,7 @@ import org.hibernate.annotations.CreationTimestamp;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "gds_questsions")
+@Table(name = "gds_questions")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -17,13 +17,19 @@ public class GdsQuestion {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long gdsId;
+    private Long id;
 
-    @Column(columnDefinition = "TEXT", nullable = false)
-    private String question;
+    @Column(nullable = false)
+    private String originalQuestion;
 
-    @Enumerated(EnumType.STRING)
-    private GdsCategory category;
+    @Column(columnDefinition = "TEXT")
+    private String friendlyQuestion;
+
+    @Column(nullable = false)
+    private Integer questionNumber;
+
+    @Column(nullable = false)
+    private Boolean isPositive; // 긍정적 응답이 높은 점수를 받는지 여부
 
     @CreationTimestamp
     private LocalDateTime createdAt;
